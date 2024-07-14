@@ -4,20 +4,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faIndianRupeeSign } from "@fortawesome/free-solid-svg-icons";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
+
 import { MDBDataTable } from "mdbreact";
 import Loader from "../layout/Loader";
 import { getRestaurants } from "../../actions/restaurantAction";
 import { myOrders, clearErrors } from "../../actions/orderActions";
+
 const ListOrders = () => {
   const alert = useAlert();
   const dispatch = useDispatch();
 
-  // const {loading,error,orders}=useSelector((state)=>state.restaurants);
   const { loading, error, orders } = useSelector((state) => state.myOrders);
+
   const { restaurants } = useSelector((state) => state.restaurants);
+
   const restaurantList = Array.isArray(restaurants.restaurants)
     ? restaurants.restaurants
     : [];
+
   useEffect(() => {
     dispatch(myOrders());
     dispatch(getRestaurants());
@@ -26,6 +30,7 @@ const ListOrders = () => {
       dispatch(clearErrors());
     }
   }, [dispatch, alert, error]);
+
   const setOrders = () => {
     const data = {
       columns: [
@@ -59,6 +64,7 @@ const ListOrders = () => {
           field: "orderDate",
           sort: "asc",
         },
+
         {
           label: "Actions",
           field: "actions",
@@ -68,7 +74,7 @@ const ListOrders = () => {
       rows: [],
     };
 
-    //check if order array is not empty or defined
+    //check if orders array is not empty or undefined
     if (orders && orders.length > 0 && restaurantList.length > 0) {
       const sortedOrders = orders.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -77,6 +83,7 @@ const ListOrders = () => {
         const orderItemNames = order.orderItems
           .map((item) => item.name)
           .join(",");
+
         const restaurant = restaurantList.find(
           (restaurant) => restaurant._id.toString() === order.restaurant._id
         );
@@ -99,7 +106,7 @@ const ListOrders = () => {
           orderItems: orderItemNames,
           orderDate: new Date(order.createdAt).toLocaleDateString(),
           actions: (
-            <Link to={'/eats/orders/${order._id}'} className="btn btn-primary">
+            <Link to={`/eats/orders/${order._id}`} className="btn btn-primary">
               <i className="fa fa-eye"></i>
             </Link>
           ),
@@ -108,6 +115,7 @@ const ListOrders = () => {
     }
     return data;
   };
+
   return (
     <>
       <div className="cartt">
@@ -128,4 +136,5 @@ const ListOrders = () => {
     </>
   );
 };
-export default ListOrders;
+
+export default ListOrders;

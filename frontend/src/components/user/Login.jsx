@@ -18,7 +18,7 @@ const {isAuthenticated,loading,error}=useSelector((state)=>state.auth);
 
 useEffect(()=>{
     if(isAuthenticated){
-        window.location.href='./'
+        window.location.href='/'
     }
     if(error){
         alert.error(error);
